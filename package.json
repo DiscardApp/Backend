@@ -1,0 +1,23 @@
+{
+  "name": "discardapp-backend",
+  "version": "1.0.0",
+  "description": "DiscardApp Backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/discardapp/backend.git"
+  },
+  "author": "DiscardApp <gitlab.com/discardapp>",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://gitlab.com/discardapp/backend/issues"
+  },
+  "homepage": "https://gitlab.com/discardapp/backend#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^6.8.0"
+  }
+}

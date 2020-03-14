@@ -1,0 +1,55 @@
+{
+  "env": {
+    "es6": true,
+    "node": true
+  },
+  "extends": "eslint:recommended",
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 2017
+  },
+  "rules": {
+    "require-atomic-updates": "off",
+    "indent": [
+      "error",
+      "tab",
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "quotes": [
+      "error",
+      "single"
+    ],
+    "semi": [
+      "error",
+      "always"
+    ],
+    "padding-line-between-statements": [
+      "error",
+      {
+        "blankLine": "always",
+        "prev": [
+          "block",
+          "block-like",
+          "cjs-export",
+          "class",
+          "export",
+          "import"
+        ],
+        "next": "*"
+      },
+      {
+        "blankLine": "any",
+        "prev": [
+          "export",
+          "import"
+        ],
+        "next": [
+          "export",
+          "import"
+        ]
+      }
+    ]
+  }
+}
