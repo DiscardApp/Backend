@@ -45,7 +45,7 @@ class HTTPHandler {
 		}
 
 		const { controller, names, route: routeName } = route;
-		const parameters = {
+		const parameters = context.parameters = {
 			query,
 			route: {},
 			controller: {
@@ -73,7 +73,7 @@ class HTTPHandler {
 			}
 
 			try {
-				parameters.body = this.parseBody(request);
+				parameters.body = await this.parseBody(request);
 			} catch (err) {
 				return context.respond(err);
 			}
@@ -83,18 +83,30 @@ class HTTPHandler {
 		if (http.METHODS.includes(request.method)) method = request.method.toLowerCase();
 		if (!controller[method]) method = 'notAllowed';
 
-		context.parameters = parameters;
-
 		controller[method].call(context);
 	}
 
 	/**
 	 * Parses the request body to either a JSON object or a Buffer
 	 * @param {http.IncomingMessage} request Incoming request
+	 * @returns {Object|Buffer} The parsed content
 	 */
-	parseBody(request) {
+	async parseBody(request) {
+		const body = await new Promise((resolve, reject) => {
+			const data = [];
+
+			request.setTimeout(30000, () => {
+				this.status = 408;
+				reject(new Error('Request timed out'));
+			});
+
+			request.on('data', chunk => data.push(chunk));
+			request.on('end', () => resolve(Buffer.concat(data)));
+			request.on('error', reject);
+		});
+
 		const [mime] = (request.headers['content-type'] || '').toLowerCase().split(';');
-		return mime === 'application/json' ? JSON.parse(request.body) : Buffer.from(request.body === undefined ? '' : request.body);
+		return mime === 'application/json' ? JSON.parse(body) : Buffer.from(body);
 	}
 
 }
