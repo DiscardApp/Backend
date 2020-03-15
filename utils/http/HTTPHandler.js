@@ -7,14 +7,32 @@ const SizeLimit = 8 * 1000 ** 2;
 
 class HTTPHandler {
 
-	constructor({ port } = {}) {
+	/**
+	 * Creates a new HTTP Handler, loads all routes and listens on the given port
+	 * @param {object} [config] Configuration
+	 * @param {number} [config.port=80] Port to listen on
+	 */
+	constructor(config = { port: 80 }) {
 		this.server = new http.Server(this.handleRequest.bind(this));
 		this.router = new Router();
-		this.router.loadRoutes();
+		this.run(config);
+	}
 
+	/**
+	 * Loads all routes and listens on the given port
+	 * @param {object} config Configuration
+	 * @param {number} config.port Port to listen on
+	 */
+	async run({ port }) {
+		await this.router.loadRoutes();
 		this.server.listen(port);
 	}
 
+	/**
+	 * Handles a HTTP request and calls the corresponding Controller
+	 * @param {http.IncomingMessage} request Incoming request
+	 * @param {http.ServerResponse} response Outgoing response
+	 */
 	async handleRequest(request, response) {
 		const context = new ControllerContext(request, response);
 
@@ -27,7 +45,14 @@ class HTTPHandler {
 		}
 
 		const { controller, names, route: routeName } = route;
-		const parameters = { query, route: {}, controller: { name: routeName } };
+		const parameters = {
+			query,
+			route: {},
+			controller: {
+				route: routeName,
+				name: controller.constructor.name
+			}
+		};
 
 		const pathVars = pathname.match(route.regex) || [];
 		for (let i = 0; i < names.length; i++) {
@@ -63,6 +88,10 @@ class HTTPHandler {
 		controller[method].call(context);
 	}
 
+	/**
+	 * Parses the request body to either a JSON object or a Buffer
+	 * @param {http.IncomingMessage} request Incoming request
+	 */
 	parseBody(request) {
 		const [mime] = (request.headers['content-type'] || '').toLowerCase().split(';');
 		return mime === 'application/json' ? JSON.parse(request.body) : Buffer.from(request.body === undefined ? '' : request.body);

@@ -7,8 +7,12 @@ class Router {
 		this.routes = [];
 	}
 
-	async loadRoutes(routeDir = './controllers') {
-		const absPath = path.resolve(routeDir);
+	/**
+	 * Recursively loads all controllers in the given directory
+	 * @param {string} [controllerDir] The directory to load controllers from
+	 */
+	async loadRoutes(controllerDir = './controllers') {
+		const absPath = path.resolve(controllerDir);
 
 		for (const location of fs.readdirSync(absPath)) {
 			const absLocation = path.join(absPath, location);
@@ -27,7 +31,12 @@ class Router {
 		}
 	}
 
+	/**
+	 * Converts a path to a matching RegExp
+	 * @param {string} path The path to parse
+	 */
 	static pathToRegex(path) {
+		/** @type string[] */
 		const names = [];
 		const replacements = [];
 
@@ -52,6 +61,11 @@ class Router {
 		};
 	}
 
+	/**
+	 * Registers a route
+	 * @param {string} route The route to match
+	 * @param {*} controller The controller to invoke
+	 */
 	register(route, controller) {
 		if (!controller)
 			throw new Error(`Tried to register route ${route} with no controller`);

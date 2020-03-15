@@ -1,12 +1,24 @@
+const http = require('http'); // eslint-disable-line no-unused-vars
+
 class ControllerContext {
 
+	/**
+	 * Provides utility functions for HTTP Controllers
+	 * @param {http.IncomingMessage} request Incoming request
+	 * @param {http.ServerResponse} response Outgoing response
+	 */
 	constructor(request, response) {
 		this.request = request;
 		this.response = response;
 
+		this.status = undefined;
 		this.timestamp = Date.now();
 	}
 
+	/**
+	 * Replies to the HTTP request
+	 * @param {*} data Data to send
+	 */
 	respond(data) {
 		let body;
 
@@ -32,14 +44,22 @@ class ControllerContext {
 		console.log(`${this.request.method} ${this.parameters.controller.name} from ${this.request.socket.remoteAddress} finished in ${Date.now() - this.timestamp}ms`);
 	}
 
-	error(data) {
+	/**
+	 * Replies with a 500 Internal Server Error
+	 * @param {*} [data] Message to send
+	 */
+	error(data = 'Internal Server Error') {
 		this.status = 500;
 		this.respond(data);
 	}
 
-	notAllowed() {
+	/**
+	 * Replies with a 405 Method Not Allowed
+	 * @param {*} [data] Message to send
+	 */
+	notAllowed(data = 'Method Not Allowed') {
 		this.status = 405;
-		this.respond(new Error('Method Not Allowed'));
+		this.respond(data);
 	}
 
 }
