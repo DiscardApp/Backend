@@ -22,6 +22,9 @@ class Router {
 				this.loadRoutes(absLocation);
 			else {
 				const Controller = require(absLocation);
+				if (typeof Controller !== 'function')
+					continue;
+
 				const controller = new Controller();
 
 				if (controller.route)
