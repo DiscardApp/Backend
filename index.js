@@ -15,7 +15,7 @@ class DiscardApp {
 	masterSetup() {
 		console.log(`[Master.${process.pid}] Starting`);
 
-		for (let i = 0; i <= os.cpus().length; i++) {
+		for (let i = 0; i < os.cpus().length; i++) {
 			const worker = cluster.fork();
 			worker.on('exit', () => {
 				console.log(`[Worker.${worker.process.pid}] Worker died, restarting`);
