@@ -19,7 +19,7 @@ class ControllerContext {
 				body = JSON.stringify(data);
 				this.response.setHeader('Content-Type', 'application/json');
 			} catch (err) {
-				this.error(err);
+				return this.error(err);
 			}
 		} else {
 			this.response.setHeader('Content-Type', 'text/plain');
