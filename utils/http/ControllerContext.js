@@ -41,7 +41,7 @@ class ControllerContext {
 		this.response.writeHead(this.status || 200);
 		this.response.end(body);
 
-		console.log(`${this.request.method} ${this.parameters.controller.name} from ${this.request.socket.remoteAddress} finished in ${Date.now() - this.timestamp}ms`);
+		console.log(`${this.request.method} ${this.parameters ? this.parameters.controller.name : 'NotFound'} from ${this.request.socket.remoteAddress} finished with code ${this.status || 200} in ${Date.now() - this.timestamp}ms`);
 	}
 
 	/**
