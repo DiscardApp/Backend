@@ -16,7 +16,9 @@
     "url": "https://gitlab.com/discardapp/backend/issues"
   },
   "homepage": "https://gitlab.com/discardapp/backend#readme",
-  "dependencies": {},
+  "dependencies": {
+    "postgres": "^1.0.2"
+  },
   "devDependencies": {
     "eslint": "^6.8.0"
   }
