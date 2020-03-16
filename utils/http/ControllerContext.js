@@ -3,6 +3,15 @@ const http = require('http'); // eslint-disable-line no-unused-vars
 class ControllerContext {
 
 	/**
+	 * @typedef {object} RequestParameters
+	 * @property {object} query Query parameters
+	 * @property {object} route Route parameters
+	 * @property {object} controller Controller info
+	 * @property {string} controller.route Controller path
+	 * @property {string} controller.name Controller name
+	 */
+
+	/**
 	 * Provides utility functions for HTTP Controllers
 	 * @param {http.IncomingMessage} request Incoming request
 	 * @param {http.ServerResponse} response Outgoing response
@@ -11,8 +20,16 @@ class ControllerContext {
 		this.request = request;
 		this.response = response;
 
+		/**
+		 * @type {number?}
+		 */
 		this.status = undefined;
 		this.timestamp = Date.now();
+
+		/**
+		 * @type {RequestParameters}
+		 */
+		this.parameters;
 	}
 
 	/**
