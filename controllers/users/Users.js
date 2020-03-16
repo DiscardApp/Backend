@@ -7,8 +7,8 @@ class Users extends ControllerContext {
 	}
 
 	async get() {
-		if (this.parameters.route.id) this.show();
-		else this.list();
+		if (this.parameters.route.id) return this.show();
+		else return this.list();
 	}
 
 	async list() {
