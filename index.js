@@ -1,7 +1,7 @@
 const cluster = require('cluster');
 const os = require('os');
 const postgres = require('postgres');
-const ConfigManager = require('./utils/configs/ConfigManager');
+const ConfigManager = require('./utils/config/ConfigManager');
 const HTTPHandler = require('./utils/http/HTTPHandler');
 
 class DiscardApp {
