@@ -4,8 +4,8 @@ class ControllerContext {
 
 	/**
 	 * @typedef {object} RequestParameters
-	 * @property {object} query Query parameters
-	 * @property {object} route Route parameters
+	 * @property {Object.<string, string>} query Query parameters
+	 * @property {Object.<string, string>} route Route parameters
 	 * @property {object} controller Controller info
 	 * @property {string} controller.route Controller path
 	 * @property {string} controller.name Controller name
@@ -19,11 +19,6 @@ class ControllerContext {
 	constructor(request, response) {
 		this.request = request;
 		this.response = response;
-
-		/**
-		 * @type {number?}
-		 */
-		this.status = undefined;
 		this.timestamp = Date.now();
 
 		/**
@@ -35,15 +30,15 @@ class ControllerContext {
 	/**
 	 * Replies to the HTTP request
 	 * @param {*} data Data to send
+	 * @param {number} [status=200] Status code to send
+	 * @returns {void}
 	 */
-	respond(data) {
+	respond(data, status) {
 		let body;
 
-		if (data instanceof Error) {
-			this.status = this.status || 400;
-			this.response.setHeader('Content-Type', 'text/plain');
-			body = data.message || 'Bad Request';
-		} else if (typeof data === 'object') {
+		if (data instanceof Error)
+			return this.respond(data.message, status || 400);
+		else if (typeof data === 'object') {
 			try {
 				body = JSON.stringify(data);
 				this.response.setHeader('Content-Type', 'application/json');
@@ -52,10 +47,10 @@ class ControllerContext {
 			}
 		} else {
 			this.response.setHeader('Content-Type', 'text/plain');
-			body = (data === undefined ? '' : data).toString();
+			body = ([null, undefined].some(type => data === type) ? '' : data).toString();
 		}
 
-		this.response.writeHead(this.status || 200);
+		this.response.writeHead(status || 200);
 		this.response.end(body);
 
 		console.log(`${this.request.method} ${this.parameters ? this.parameters.controller.name : 'NotFound'} from ${this.request.socket.remoteAddress} finished with code ${this.status || 200} in ${Date.now() - this.timestamp}ms`);
@@ -66,8 +61,7 @@ class ControllerContext {
 	 * @param {*} [data] Message to send
 	 */
 	error(data = 'Internal Server Error') {
-		this.status = 500;
-		this.respond(data);
+		return this.respond(data, 500);
 	}
 
 	/**
@@ -75,8 +69,7 @@ class ControllerContext {
 	 * @param {*} [data] Message to send
 	 */
 	notAllowed(data = 'Method Not Allowed') {
-		this.status = 405;
-		this.respond(data);
+		return this.respond(data, 405);
 	}
 
 }

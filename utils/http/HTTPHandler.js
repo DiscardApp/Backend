@@ -86,13 +86,18 @@ class HTTPHandler {
 		for (const propertyName of Object.getOwnPropertyNames(Object.getPrototypeOf(controller)))
 			context[propertyName] = controller[propertyName];
 
-		controller[method].call(context);
+		try {
+			await Promise.resolve(controller[method].call(context));
+		} catch (err) {
+			console.error(err);
+			context.error();
+		}
 	}
 
 	/**
 	 * Parses the request body to either a JSON object or a Buffer
 	 * @param {http.IncomingMessage} request Incoming request
-	 * @returns {Object|Buffer} The parsed content
+	 * @returns {Promise<Object.<string, any>|Buffer>} The parsed content
 	 */
 	async parseBody(request) {
 		const body = await new Promise((resolve, reject) => {
