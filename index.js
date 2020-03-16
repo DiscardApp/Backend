@@ -40,12 +40,20 @@ class DiscardApp {
 	 */
 	async handleWorkerMessage(worker, message) {
 		const { type, nonce } = message;
-		const result = { type, nonce };
+		const result = { type, nonce, error: false };
 
 		switch (type) {
 			case 'sql': {
 				const { query, parameters } = message;
-				const data = await this.postgres.unsafe(query, parameters);
+				let data;
+
+				try {
+					data = await this.postgres.unsafe(query, parameters);
+				} catch (err) {
+					result.error = true;
+					data = err;
+				}
+
 				result.data = data;
 				break;
 			}
