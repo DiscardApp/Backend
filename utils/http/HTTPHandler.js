@@ -83,6 +83,9 @@ class HTTPHandler {
 		if (http.METHODS.includes(request.method)) method = request.method.toLowerCase();
 		if (!controller[method]) method = 'notAllowed';
 
+		for (const propertyName of Object.getOwnPropertyNames(Object.getPrototypeOf(controller)))
+			context[propertyName] = controller[propertyName];
+
 		controller[method].call(context);
 	}
 
