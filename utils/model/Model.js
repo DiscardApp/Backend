@@ -121,25 +121,25 @@ class Model {
 
 	/**
 	 * Returns a single Model matching the filter
-	 * @param {Object} filter The filter to apply
-	 * @returns {Model|null} The model matching the filter
+	 * @param {Object} [filter] The filter to apply
+	 * @returns {Promise<Model|null>} The model matching the filter
 	 */
-	static async find(filter) {
+	static async find(filter = {}) {
 		const modelKeys = Object.keys(this.model);
 		for (const key of Object.keys(filter))
 			if (!modelKeys.includes(key)) throw new Error(`Invalid key reference: ${key}`);
 
-		const results = await this.filter(filter, SQLHandler);
+		const results = await this.list(filter, SQLHandler);
 		if (!results.length) return null;
 		return results[0];
 	}
 
 	/**
 	 * Returns zero or more Models matching the filter
-	 * @param {object} filter The filter to apply
-	 * @returns {ModelList} A list of models matching the filter
+	 * @param {object} [filter] The filter to apply
+	 * @returns {Promise<ModelList>} A list of models matching the filter
 	 */
-	static async filter(filter) {
+	static async list(filter = {}) {
 		const filters = Object.keys(filter);
 		for (let i = 0; i < filters.length; i++) {
 			const isArray = Array.isArray(filter[filters[i]]);
