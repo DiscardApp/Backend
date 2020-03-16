@@ -1,3 +1,5 @@
+const SQLHandler = require('../database/SQLHandler');
+
 class Model {
 
 	constructor(data = {}) {
@@ -52,7 +54,7 @@ class Model {
 		return response;
 	}
 
-	async create(database) {
+	async create() {
 		const data = {};
 
 		for (const [key, value] of Object.entries(this)) {
@@ -60,11 +62,11 @@ class Model {
 			data[key] = value;
 		}
 
-		const result = await database.query(`INSERT INTO ${this.constructor.table}(${Object.keys(data).join(', ')}) VALUES (${[...Array(Object.keys(data).length).keys()].map(index => `$${index + 1}`).join(', ')}) RETURNING *`, Object.values(data));
+		const result = await SQLHandler.query(`INSERT INTO ${this.constructor.table}(${Object.keys(data).join(', ')}) VALUES (${[...Array(Object.keys(data).length).keys()].map(index => `$${index + 1}`).join(', ')}) RETURNING *`, Object.values(data));
 		return new this.constructor(result[0]);
 	}
 
-	async update(payload, database) {
+	async update(payload) {
 		const data = {};
 		const payloadKeys = Object.keys(payload);
 		const primaryKeys = [];
@@ -94,11 +96,11 @@ class Model {
 		for (let i = 0; i < dataKeys.length; i++)
 			set.push(`${dataKeys[i]} = $${i + primaryKeys.length + 1}`);
 
-		const result = await database.query(`UPDATE ${this.constructor.table} SET ${set.join(', ')} WHERE ${where.join(' AND ')} RETURNING *`, [...primaryKeys.map(key => this[key]), ...Object.values(data)]);
+		const result = await SQLHandler.query(`UPDATE ${this.constructor.table} SET ${set.join(', ')} WHERE ${where.join(' AND ')} RETURNING *`, [...primaryKeys.map(key => this[key]), ...Object.values(data)]);
 		return new this.constructor(result[0]);
 	}
 
-	async delete(database) {
+	async delete() {
 		const primaryKeys = [];
 
 		for (const key of Object.keys(this)) {
@@ -113,22 +115,21 @@ class Model {
 		for (let i = 0; i < primaryKeys.length; i++)
 			where.push(`${primaryKeys[i]} = $${i + 1}`);
 
-		const result = await database.query(`DELETE FROM ${this.constructor.table} WHERE ${where.join(' AND ')} RETURNING *`, [...primaryKeys.map(key => this[key])]);
+		const result = await SQLHandler.query(`DELETE FROM ${this.constructor.table} WHERE ${where.join(' AND ')} RETURNING *`, [...primaryKeys.map(key => this[key])]);
 		return new this.constructor(result[0]);
 	}
 
 	/**
 	 * Returns a single Model matching the filter
 	 * @param {Object} filter The filter to apply
-	 * @param {SQLHandler} database The database to query
 	 * @returns {Model|null} The model matching the filter
 	 */
-	static async find(filter, database) {
+	static async find(filter) {
 		const modelKeys = Object.keys(this.model);
 		for (const key of Object.keys(filter))
 			if (!modelKeys.includes(key)) throw new Error(`Invalid key reference: ${key}`);
 
-		const results = await this.filter(filter, database);
+		const results = await this.filter(filter, SQLHandler);
 		if (!results.length) return null;
 		return results[0];
 	}
@@ -136,10 +137,9 @@ class Model {
 	/**
 	 * Returns zero or more Models matching the filter
 	 * @param {object} filter The filter to apply
-	 * @param {SQLHandler} database The database to query
 	 * @returns {ModelList} A list of models matching the filter
 	 */
-	static async filter(filter, database) {
+	static async filter(filter) {
 		const filters = Object.keys(filter);
 		for (let i = 0; i < filters.length; i++) {
 			const isArray = Array.isArray(filter[filters[i]]);
@@ -148,7 +148,7 @@ class Model {
 			filters[i] = `${filters[i]} ${isArray ? `= ANY($${i + 1}::${this.model[filters[i]].type}[])` : `= $${i + 1}`}`;
 		}
 
-		const result = await database.query(`SELECT * FROM ${this.table}${filters.length ? ` WHERE ${filters.join(' AND ')}` : ''}`, Object.values(filter));
+		const result = await SQLHandler.query(`SELECT * FROM ${this.table}${filters.length ? ` WHERE ${filters.join(' AND ')}` : ''}`, Object.values(filter));
 		return new ModelList(this, result);
 	}
 
