@@ -57,11 +57,11 @@ class ControllerContext {
 	}
 
 	/**
-	 * Replies with a 500 Internal Server Error
-	 * @param {*} [data] Message to send
-	 */
-	error(data = 'Internal Server Error') {
-		return this.respond(data, 500);
+ 	 * Replies with a 404 Not Found
+ 	 * @param {*} [data] Message to send
+ 	 */
+	notFound(data = 'Not Found') {
+		return this.respond(data, 404);
 	}
 
 	/**
@@ -70,6 +70,14 @@ class ControllerContext {
 	 */
 	notAllowed(data = 'Method Not Allowed') {
 		return this.respond(data, 405);
+	}
+
+	/**
+ 	 * Replies with a 500 Internal Server Error
+ 	 * @param {*} [data] Message to send
+ 	 */
+	error(data = 'Internal Server Error') {
+		return this.respond(data, 500);
 	}
 
 }
