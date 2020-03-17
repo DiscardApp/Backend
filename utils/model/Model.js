@@ -3,13 +3,8 @@ const SQLHandler = require('../database/SQLHandler');
 class Model {
 
 	constructor(data = {}) {
-		for (const column of Object.keys(this.constructor.model)) {
-			const converter = this.constructor.model[column].converter;
-			if (converter && converter.in)
-				data[column] = converter.in(data[column]);
-
+		for (const column of Object.keys(this.constructor.model))
 			this[column] = data[column];
-		}
 	}
 
 	static buildQuery() {
@@ -45,10 +40,6 @@ class Model {
 			if (this.constructor.model[column].hide || filter.includes(column)) continue;
 
 			response[column] = this[column];
-
-			const converter = this.constructor.model[column].converter;
-			if (converter && converter.out)
-				response[column] = converter.out(response[column]);
 		}
 
 		return response;
@@ -78,11 +69,6 @@ class Model {
 				primaryKeys.push(key);
 
 			if (!payloadKeys.includes(key)) continue;
-
-			const converter = column.converter;
-			if (converter && converter.in)
-				payload[key] = converter.in(payload[key]);
-
 			data[key] = payload[key];
 		}
 
