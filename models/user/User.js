@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const Model = require('../../utils/model/Model');
+const Permissions = require('./Permissions');
 
 class User extends Model {
 
@@ -62,6 +63,18 @@ class User extends Model {
 	 */
 	static comparePassword(password, hash) {
 		return bcrypt.compare(password, hash);
+	}
+
+	get permissions() {
+		return new Permissions(User.permissionNames, this.permissions_value);
+	}
+
+	static get permissions() {
+		return Permissions;
+	}
+
+	static get permissionNames() {
+		return ['active', 'verifiedEmail', 'verifiedPhone', 'admin'];
 	}
 
 }
