@@ -9,7 +9,6 @@
     "ecmaVersion": 2017
   },
   "rules": {
-    "require-atomic-updates": "off",
     "indent": [
       "error",
       "tab",
