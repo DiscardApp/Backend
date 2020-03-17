@@ -17,6 +17,7 @@
   },
   "homepage": "https://gitlab.com/discardapp/backend#readme",
   "dependencies": {
+    "bcrypt": "^4.0.1",
     "postgres": "^1.0.2"
   },
   "devDependencies": {
