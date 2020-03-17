@@ -7,6 +7,10 @@ class User extends Model {
 		return 'users';
 	}
 
+	static get modelID() {
+		return 1;
+	}
+
 	static get model() {
 		return {
 			id: {
