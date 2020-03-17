@@ -45,6 +45,10 @@ class Model {
 		return response;
 	}
 
+	/**
+	 * Writes the model to the database
+	 * @returns {Promise<Model>} The created model
+	 */
 	async create() {
 		const data = {};
 
@@ -57,6 +61,10 @@ class Model {
 		return new this.constructor(result[0]);
 	}
 
+	/**
+	 * Updates the database entry
+	 * @returns {Promise<Model>} The edited model
+	 */
 	async update(payload) {
 		const data = {};
 		const payloadKeys = Object.keys(payload);
@@ -86,6 +94,10 @@ class Model {
 		return new this.constructor(result[0]);
 	}
 
+	/**
+	 * Deletes the model from the database
+	 * @returns {Promise<Model>} The deleted model
+	 */
 	async delete() {
 		const primaryKeys = [];
 
