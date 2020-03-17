@@ -15,6 +15,15 @@ class Users extends ControllerContext {
 		const users = await User.list();
 		this.respond(users.toAPIResponse());
 	}
+
+	async show() {
+		const { id } = this.parameters.route;
+		const user = await User.find({ id });
+		if (!user)
+			return this.notFound({ message: 'User not found', code: 10000 | User.modelID });
+
+		this.respond(user.toAPIResponse());
+	}
 }
 
 module.exports = Users;
