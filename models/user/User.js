@@ -20,10 +20,26 @@ class User extends Model {
 				type: 'VARCHAR(32)',
 				notNull: true
 			},
+			avatar: {
+				type: 'VARCHAR(34)'
+			},
+			email: {
+				type: 'VARCHAR(254)',
+				unique: true,
+				notNull: true
+			},
+			phone: {
+				type: 'VARCHAR(50)'
+			},
 			password: {
 				type: 'VARCHAR(60)',
 				notNull: true,
 				hide: true
+			},
+			permissions_value: {
+				type: 'SMALLINT',
+				notNull: true,
+				default: 0
 			}
 		};
 	}
