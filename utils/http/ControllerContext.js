@@ -6,6 +6,7 @@ class ControllerContext {
 	 * @typedef {object} RequestParameters
 	 * @property {Object.<string, string>} query Query parameters
 	 * @property {Object.<string, string>} route Route parameters
+	 * @property {object|Buffer} [body] Request body
 	 * @property {object} controller Controller info
 	 * @property {string} controller.route Controller path
 	 * @property {string} controller.name Controller name
@@ -54,6 +55,22 @@ class ControllerContext {
 		this.response.end(body);
 
 		console.log(`${this.request.method} ${this.parameters ? this.parameters.controller.name : 'NotFound'} from ${this.request.socket.remoteAddress} finished with code ${this.status || 200} in ${Date.now() - this.timestamp}ms`);
+	}
+
+	get postWithID() {
+		return { message: 'Cannot POST to a specific ID', code: 11001 };
+	}
+
+	get putWithoutID() {
+		return { message: 'Cannot POST to a specific ID', code: 11001 };
+	}
+
+	/**
+ 	 * Replies with a 400 Bad Request
+ 	 * @param {*} [data] Message to send
+ 	 */
+	badRequest(data = 'Bad Request') {
+		return this.respond(data, 400);
 	}
 
 	/**
