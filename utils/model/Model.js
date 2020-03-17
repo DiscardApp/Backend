@@ -137,14 +137,6 @@ class Model {
 		const result = await SQLHandler.query(`SELECT * FROM ${this.table}${filters.length ? ` WHERE ${filters.join(' AND ')}` : ''}`, Object.values(filter));
 		return new ModelList(this, result);
 	}
-
-	/**
-	 * @returns {Error} Invalid Model Error
-	 */
-	static get invalid() {
-		return new InvalidModelError(this.name);
-	}
-
 }
 
 class ModelList extends Array {
@@ -180,15 +172,6 @@ class ModelList extends Array {
 		return models;
 	}
 
-}
-
-class InvalidModelError extends Error {
-	constructor(modelName) {
-		super();
-
-		const modelNameUpper = modelName.replace(/[a-z][A-Z]/g, match => match.split('').join('_')).toUpperCase();
-		this.message = `INVALID_${modelNameUpper}`;
-	}
 }
 
 module.exports = Model;
