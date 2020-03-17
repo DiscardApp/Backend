@@ -137,6 +137,10 @@ class Model {
 		const result = await SQLHandler.query(`SELECT * FROM ${this.table}${filters.length ? ` WHERE ${filters.join(' AND ')}` : ''}`, Object.values(filter));
 		return new ModelList(this, result);
 	}
+
+	static get modelID() {
+		throw new Error(`Model ID for model ${this.name} has not been set`);
+	}
 }
 
 class ModelList extends Array {
