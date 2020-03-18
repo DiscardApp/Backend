@@ -41,7 +41,7 @@ class HTTPHandler {
 		const route = this.router.routes.find(({ regex }) => regex.test(pathname));
 		if (!route) {
 			context.status = 404;
-			return context.respond(new Error('Not Found'));
+			return context.notFound();
 		}
 
 		const { controller, names, route: routeName } = route;
@@ -64,13 +64,10 @@ class HTTPHandler {
 		}
 
 		if (['POST', 'PUT'].includes(request.method)) {
-			if (!request.headers['content-length']) {
-				context.status = 411;
-				return context.respond(new Error('Length Required'));
-			} else if (request.headers['content-length'] > SizeLimit) {
-				context.status = 413;
-				return context.respond(new Error('Payload Too Large'));
-			}
+			if (!request.headers['content-length'])
+				return context.badRequest('Length Required', 411);
+			else if (request.headers['content-length'] > SizeLimit)
+				return context.respond('Payload Too Large', 413);
 
 			try {
 				parameters.body = await this.parseBody(request);
