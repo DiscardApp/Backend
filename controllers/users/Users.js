@@ -20,7 +20,7 @@ class Users extends ControllerContext {
 		const { id } = this.parameters.route;
 		const user = await User.find({ id });
 		if (!user)
-			return this.notFound({ message: 'User not found', code: 10000 + User.modelID });
+			return this.notFound('User not found');
 
 		this.respond(user.toAPIResponse());
 	}

@@ -20,7 +20,7 @@ class Guilds extends ControllerContext {
 		const { id } = this.parameters.route;
 		const guilds = await Guild.find({ id });
 		if (!guilds)
-			return this.notFound({ message: 'Guild not found', code: 10000 + Guild.modelID });
+			return this.notFound('Guild not found');
 
 		this.respond(guilds.toAPIResponse());
 	}

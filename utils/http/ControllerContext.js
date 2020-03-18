@@ -58,11 +58,15 @@ class ControllerContext {
 	}
 
 	get postWithID() {
-		return { message: 'Cannot POST to a specific ID', code: 11001 };
+		return 'Cannot POST to a specific ID';
 	}
 
 	get putWithoutID() {
-		return { message: 'Cannot POST to a specific ID', code: 11001 };
+		return 'Cannot PUT without a specific ID';
+	}
+
+	get patchWithoutID() {
+		return 'Cannot PATCH without a specific ID';
 	}
 
 	/**
