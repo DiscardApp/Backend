@@ -10,6 +10,8 @@ const HTTPHandler = require('./utils/http/HTTPHandler');
 class DiscardApp {
 
 	constructor() {
+		BigInt.prototype.toJSON = function () { return this.toString(); };
+
 		this.configManager = new ConfigManager();
 
 		if (cluster.isMaster)
@@ -117,12 +119,16 @@ class DiscardApp {
 				const { query, parameters } = message;
 				let data;
 
+				console.log(query, parameters);
+
 				try {
 					data = await this.postgres.unsafe(query, parameters);
 				} catch (err) {
 					result.error = true;
 					data = err;
 				}
+
+				console.log(data);
 
 				result.data = data;
 				break;

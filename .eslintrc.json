@@ -8,6 +8,9 @@
     "sourceType": "module",
     "ecmaVersion": 2017
   },
+  "globals": {
+    "BigInt": true
+  },
   "rules": {
     "indent": [
       "error",
