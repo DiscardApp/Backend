@@ -1,5 +1,5 @@
 const ControllerContext = require('../../utils/http/ControllerContext');
-const Guild = require('../../models/user/Guild');
+const Guild = require('../../models/guild/Guild');
 
 class Guilds extends ControllerContext {
 	route(router) {
