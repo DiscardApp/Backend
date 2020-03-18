@@ -97,8 +97,9 @@ class ControllerContext {
  	 * Replies with a 500 Internal Server Error
  	 * @param {*} [data] Message to send
  	 */
-	error(data = 'Internal Server Error') {
-		return this.respond(data, 500);
+	error(data) {
+		console.error(data);
+		return this.respond('Internal Server Error', 500);
 	}
 
 }

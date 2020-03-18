@@ -86,8 +86,7 @@ class HTTPHandler {
 		try {
 			await Promise.resolve(controller[method].call(context));
 		} catch (err) {
-			console.error(err);
-			context.error();
+			context.error(err);
 		}
 	}
 

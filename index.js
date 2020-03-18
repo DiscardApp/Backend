@@ -123,7 +123,7 @@ class DiscardApp {
 					data = await this.postgres.unsafe(query, parameters);
 				} catch (err) {
 					result.error = true;
-					data = err;
+					data = Object.assign({}, err, { message: err.message });
 				}
 
 				result.data = data;
