@@ -18,7 +18,10 @@ class User extends Model {
 			},
 			username: {
 				type: 'VARCHAR(32)',
-				notNull: true
+				notNull: true,
+				validate(value) {
+					return typeof value === 'string' && value.length >= 3 && value.length <= 32;
+				}
 			},
 			avatar: {
 				type: 'VARCHAR(34)'
@@ -26,15 +29,24 @@ class User extends Model {
 			email: {
 				type: 'VARCHAR(254)',
 				unique: true,
-				notNull: true
+				notNull: true,
+				validate(value) {
+					return typeof value === 'string' && value.length >= 3 && value.length <= 254 && /^.{1,64}@.{1,255}$/.test(value);
+				}
 			},
 			phone: {
-				type: 'VARCHAR(50)'
+				type: 'VARCHAR(16)',
+				validate(value) {
+					return typeof value === 'string' ? /^\+\d{2, 15}$/.test(value) : ([undefined, null].includes(value) ? true : false);
+				}
 			},
 			password: {
 				type: 'VARCHAR(60)',
 				notNull: true,
-				hide: true
+				hide: true,
+				validate(value) {
+					return typeof value === 'string' && value.length >= 8;
+				}
 			},
 			permissions_value: {
 				type: 'SMALLINT',
@@ -51,6 +63,9 @@ class User extends Model {
 	 * @returns {Promise<string>} The hashed password
 	 */
 	static hashPassword(password, rounds = 12) {
+		if (!password)
+			return null;
+
 		return bcrypt.hash(password, rounds);
 	}
 
@@ -61,6 +76,9 @@ class User extends Model {
 	 * @returns {Promise<boolean>} Whether the password matches
 	 */
 	static comparePassword(password, hash) {
+		if (!password)
+			return false;
+
 		return bcrypt.compare(password, hash);
 	}
 
