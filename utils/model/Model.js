@@ -7,6 +7,17 @@ class Model {
 			this[column] = data[column];
 	}
 
+	validate() {
+		for (const [columnName, column] of Object.entries(this.constructor.model)) {
+			const value = this[columnName];
+			if (column.validate) {
+				const result = column.validate(value);
+				if (!result)
+					return new Error(`Invalid value for ${columnName}`);
+			}
+		}
+	}
+
 	static buildQuery() {
 		const columnNames = Object.keys(this.model);
 
