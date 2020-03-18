@@ -6,10 +6,6 @@ class Guild extends Model {
 		return 'users';
 	}
 
-	static get modelID() {
-		return 4;
-	}
-
 	static get model() {
 		return {
 			id: {
