@@ -54,6 +54,26 @@ class HTTPHandler {
 			}
 		};
 
+		if (!http.METHODS.includes(request.method))
+			return context.respond('Not Implemented', 501);
+
+		let method = request.method.toLowerCase();
+		if (request.method !== 'OPTIONS' && !controller[method])
+			return context.notAllowed();
+
+		if (['OPTIONS', 'POST', 'PUT', 'PATCH'].includes(request.method)) {
+			const allowedMethods = http.METHODS.filter(method => controller[method.toLowerCase()]);
+
+			response.setHeader('Access-Control-Allow-Methods', allowedMethods.join(', '));
+			response.setHeader('Access-Control-Allow-Origin', '*');
+			response.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+
+			if (request.method === 'OPTIONS') {
+				response.setHeader('Allow', ['OPTIONS', ...allowedMethods].join(', '));
+				return context.respond();
+			}
+		}
+
 		const pathVars = pathname.match(route.regex) || [];
 		for (let i = 0; i < names.length; i++) {
 			const key = names[i];
@@ -63,7 +83,7 @@ class HTTPHandler {
 			parameters.route[key] = value;
 		}
 
-		if (['POST', 'PUT'].includes(request.method)) {
+		if (['POST', 'PUT', 'PATCH'].includes(request.method)) {
 			if (!request.headers['content-length'])
 				return context.badRequest('Length Required', 411);
 			else if (request.headers['content-length'] > SizeLimit)
@@ -75,10 +95,6 @@ class HTTPHandler {
 				return context.respond(err);
 			}
 		}
-
-		let method = 'notAllowed';
-		if (http.METHODS.includes(request.method)) method = request.method.toLowerCase();
-		if (!controller[method]) method = 'notAllowed';
 
 		for (const propertyName of Object.getOwnPropertyNames(Object.getPrototypeOf(controller)))
 			context[propertyName] = controller[propertyName];
