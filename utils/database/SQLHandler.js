@@ -13,8 +13,13 @@ class SQLHandler {
 				if (nonce !== message.nonce)
 					return process.once('message', handle);
 
-				if (error) reject(data);
-				else resolve(data);
+				if (error) {
+					const error = new Error();
+					for (const [key, value] of Object.entries(data))
+						error[key] = value;
+
+					reject(error);
+				} else resolve(data);
 			};
 
 			process.once('message', handle);
