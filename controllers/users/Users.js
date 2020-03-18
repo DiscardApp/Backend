@@ -24,6 +24,36 @@ class Users extends ControllerContext {
 
 		this.respond(user.toAPIResponse());
 	}
+
+	async post() {
+		if (this.parameters.route.id)
+			return this.badRequest(this.postWithID);
+
+		const data = this.parameters.body;
+		delete data.id;
+		delete data.avatar;
+
+		data.password = await User.hashPassword(data.password);
+		data.permissions_value = User.permissions.from(User.permissionNames, ['active']);
+
+		const model = new User(data);
+		const validationResult = model.validate();
+		if (validationResult instanceof Error)
+			return this.respond(validationResult);
+
+		let user;
+		try {
+			user = await model.create();
+		} catch (err) {
+			const { routine, constraint_name } = err;
+			if (routine === '_bt_check_unique' && constraint_name === 'users_email_key')
+				return this.badRequest('This email address is already in use');
+
+			return this.error(err);
+		}
+
+		this.respond(user.toAPIResponse());
+	}
 }
 
 module.exports = Users;
