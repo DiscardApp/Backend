@@ -95,7 +95,6 @@ class User extends Model {
 class Permissions {
 	constructor(availablePermissions, grantedPermissions) {
 		this.permissions = grantedPermissions;
-		this.availablePermissions = availablePermissions;
 
 		for (const permission of availablePermissions) {
 			const index = availablePermissions.indexOf(permission);
