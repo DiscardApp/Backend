@@ -1,5 +1,6 @@
 const ControllerContext = require('../../utils/http/ControllerContext');
 const User = require('../../models/user/User');
+const VerificationToken = require('../../models/user/VerificationToken');
 
 class Users extends ControllerContext {
 	route(router) {
@@ -51,6 +52,22 @@ class Users extends ControllerContext {
 
 			return this.error(err);
 		}
+
+		const verificationTokenModel = new VerificationToken({
+			token: VerificationToken.generateToken(),
+			user_id: user.id,
+			expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000)
+		});
+
+		let verificationToken;
+		try {
+			verificationToken = await verificationTokenModel.create();
+		} catch (err) {
+			await user.delete();
+			return this.error(err);
+		}
+
+		// TODO send token by email
 
 		this.respond(user.toAPIResponse());
 	}
