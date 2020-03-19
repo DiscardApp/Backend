@@ -69,6 +69,10 @@ class ControllerContext {
 		return 'Cannot PATCH without a specific ID';
 	}
 
+	get deleteWithoutID() {
+		return 'Cannot PATCH without a specific ID';
+	}
+
 	/**
  	 * Replies with a 400 Bad Request
  	 * @param {*} [data] Message to send
