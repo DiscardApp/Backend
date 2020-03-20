@@ -85,7 +85,7 @@ class HTTPHandler {
 
 		if (['POST', 'PUT', 'PATCH'].includes(request.method)) {
 			if (!request.headers['content-length'])
-				return context.badRequest('Length Required', 411);
+				return context.respond('Length Required', 411);
 			else if (request.headers['content-length'] > SizeLimit)
 				return context.respond('Payload Too Large', 413);
 
