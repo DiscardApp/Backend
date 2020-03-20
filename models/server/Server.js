@@ -1,9 +1,9 @@
 const Model = require('../../utils/model/Model');
 
-class Guild extends Model {
+class Server extends Model {
 
 	static get table() {
-		return 'users';
+		return 'servers';
 	}
 
 	static get model() {
@@ -28,4 +28,4 @@ class Guild extends Model {
 
 }
 
-module.exports = Guild;
+module.exports = Server;
