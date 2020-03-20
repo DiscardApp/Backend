@@ -1,9 +1,9 @@
 const Model = require('../../utils/model/Model');
 
-class Server extends Model {
+class Channel extends Model {
 
 	static get table() {
-		return 'servers';
+		return 'channels';
 	}
 
 	static get model() {
@@ -15,10 +15,15 @@ class Server extends Model {
 				type: 'VARCHAR(32)',
 				notNull: true
 			},
-			icon: {
-				type: 'VARCHAR(34)'
+			is_nsfw: {
+				type: 'BOOLEAN',
+				notNull: true
 			},
-			owner_id: {
+			type: {
+				type: 'SMALLINT',
+				notNull: true
+			},
+			guild_id: {
 				type: 'BIGINT',
 				notNull: true
 			}
@@ -28,4 +33,4 @@ class Server extends Model {
 
 }
 
-module.exports = Server;
+module.exports = Channel;
