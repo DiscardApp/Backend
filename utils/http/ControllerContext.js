@@ -30,7 +30,7 @@ class ControllerContext {
 
 	/**
 	 * Replies to the HTTP request
-	 * @param {*} data Data to send
+	 * @param {*} [data] Data to send
 	 * @param {number} [status=200] Status code to send
 	 * @returns {void}
 	 */
