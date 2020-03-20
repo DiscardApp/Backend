@@ -7,6 +7,10 @@ class Model {
 			this[column] = data[column];
 	}
 
+	/**
+	 * Checks if all model data is valid
+	 * @returns {Error} An error if it's invalid, null if it's valid
+	 */
 	validate() {
 		for (const [columnName, column] of Object.entries(this.constructor.model)) {
 			const value = this[columnName];

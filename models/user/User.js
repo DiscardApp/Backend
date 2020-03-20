@@ -33,7 +33,7 @@ class User extends Model {
 			phone: {
 				type: 'VARCHAR(16)',
 				validate(value) {
-					return typeof value === 'string' ? /^\+\d{2, 15}$/.test(value) : ([undefined, null].includes(value) ? true : false);
+					return typeof value === 'string' ? /^\+\d{2, 15}$/.test(value) : [undefined, null].includes(value);
 				}
 			},
 			password: {
@@ -73,7 +73,7 @@ class User extends Model {
 	 */
 	static comparePassword(password, hash) {
 		if (!password)
-			return false;
+			return Promise.resolve(false);
 
 		return bcrypt.compare(password, hash);
 	}
