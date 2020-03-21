@@ -9,7 +9,7 @@ class SQLHandler {
 
 		const promise = new Promise((resolve, reject) => {
 			const handle = incomingMessage => {
-				const { nonce, data, error } = incomingMessage;
+				const {nonce, data, error} = incomingMessage;
 				if (nonce !== message.nonce)
 					return process.once('message', handle);
 

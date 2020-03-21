@@ -12,7 +12,7 @@ class HTTPHandler {
 	 * @param {object} [config] Configuration
 	 * @param {number} [config.port=80] Port to listen on
 	 */
-	constructor(config = { port: 80 }) {
+	constructor(config = {port: 80}) {
 		this.server = new http.Server(this.handleRequest.bind(this));
 		this.router = new Router();
 		this.run(config);
@@ -23,7 +23,7 @@ class HTTPHandler {
 	 * @param {object} config Configuration
 	 * @param {number} config.port Port to listen on
 	 */
-	async run({ port }) {
+	async run({port}) {
 		await this.router.loadRoutes();
 		this.server.listen(port);
 	}
@@ -36,15 +36,15 @@ class HTTPHandler {
 	async handleRequest(request, response) {
 		const context = new ControllerContext(request, response);
 
-		const { pathname, query } = url.parse(request.url, true);
+		const {pathname, query} = url.parse(request.url, true);
 
-		const route = this.router.routes.find(({ regex }) => regex.test(pathname));
+		const route = this.router.routes.find(({regex}) => regex.test(pathname));
 		if (!route) {
 			context.status = 404;
 			return context.notFound();
 		}
 
-		const { controller, names, route: routeName } = route;
+		const {controller, names, route: routeName} = route;
 		const parameters = context.parameters = {
 			query,
 			route: {},

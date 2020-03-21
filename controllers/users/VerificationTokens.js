@@ -13,8 +13,8 @@ class VerificationTokens extends ControllerContext {
 	}
 
 	async show() {
-		const { token } = this.parameters.route;
-		const verificationToken = await VerificationToken.find({ token });
+		const {token} = this.parameters.route;
+		const verificationToken = await VerificationToken.find({token});
 		if (!verificationToken)
 			return this.notFound('Invalid token');
 
@@ -22,12 +22,12 @@ class VerificationTokens extends ControllerContext {
 	}
 
 	async delete() {
-		const { token } = this.parameters.route;
-		const verificationToken = await VerificationToken.find({ token });
+		const {token} = this.parameters.route;
+		const verificationToken = await VerificationToken.find({token});
 		if (!verificationToken)
 			return this.notFound('Invalid token');
 
-		const user = await User.find({ id: verificationToken.user_id });
+		const user = await User.find({id: verificationToken.user_id});
 
 		await user.update({
 			permissions_value: user.permissions_value | User.permissions.from(User.permissionNames, ['verifiedEmail'])

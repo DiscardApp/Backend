@@ -1,12 +1,12 @@
 {
-    "host": "localhost",
-    "port": 5432,
-    "database": "discard",
-    "username": "discard",
-    "password": "discard",
-    "max": 10,
-    "timeout": 30,
-    "connection": {
-        "application_name": "DiscardApp"
-    }
+  "host": "localhost",
+  "port": 5432,
+  "database": "discard",
+  "username": "discard",
+  "password": "discard",
+  "max": 10,
+  "timeout": 30,
+  "connection": {
+    "application_name": "DiscardApp"
+  }
 }

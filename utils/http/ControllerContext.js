@@ -74,17 +74,17 @@ class ControllerContext {
 	}
 
 	/**
- 	 * Replies with a 400 Bad Request
- 	 * @param {*} [data] Message to send
- 	 */
+	 * Replies with a 400 Bad Request
+	 * @param {*} [data] Message to send
+	 */
 	badRequest(data = 'Bad Request') {
 		return this.respond(data, 400);
 	}
 
 	/**
- 	 * Replies with a 404 Not Found
- 	 * @param {*} [data] Message to send
- 	 */
+	 * Replies with a 404 Not Found
+	 * @param {*} [data] Message to send
+	 */
 	notFound(data = 'Not Found') {
 		return this.respond(data, 404);
 	}
@@ -98,9 +98,9 @@ class ControllerContext {
 	}
 
 	/**
- 	 * Replies with a 500 Internal Server Error
- 	 * @param {*} [data] Message to send
- 	 */
+	 * Replies with a 500 Internal Server Error
+	 * @param {*} [data] Message to send
+	 */
 	error(data) {
 		console.error(data);
 		return this.respond('Internal Server Error', 500);

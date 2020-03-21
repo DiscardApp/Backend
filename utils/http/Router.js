@@ -73,7 +73,7 @@ class Router {
 		if (!controller)
 			throw new Error(`Tried to register route ${route} with no controller`);
 
-		const { names, regex } = Router.pathToRegex(route);
+		const {names, regex} = Router.pathToRegex(route);
 
 		this.routes.push({
 			controller,

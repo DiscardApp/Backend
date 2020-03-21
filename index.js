@@ -10,7 +10,9 @@ const HTTPHandler = require('./utils/http/HTTPHandler');
 class DiscardApp {
 
 	constructor() {
-		BigInt.prototype.toJSON = function () { return this.toString(); };
+		BigInt.prototype.toJSON = function () {
+			return this.toString();
+		};
 
 		this.configManager = new ConfigManager();
 
@@ -44,7 +46,7 @@ class DiscardApp {
 		const connectionOptions = Object.assign(
 			{},
 			this.configManager.database,
-			{ database: 'postgres' }
+			{database: 'postgres'}
 		);
 
 		const postgresConn = postgres(connectionOptions);
@@ -54,7 +56,7 @@ class DiscardApp {
 			await postgresConn.unsafe(createQuery);
 		} catch (err) {
 			if (err.routine === 'createdb') {
-				const rlInterface = readline.createInterface({ input: process.stdin, output: process.stdout });
+				const rlInterface = readline.createInterface({input: process.stdin, output: process.stdout});
 				const result = await new Promise(resolve => rlInterface.question(`[Master.${process.pid}] Database ${this.configManager.database.database} already exists! Do you want to overwrite the existing database (y/N)? `, resolve));
 				rlInterface.close();
 				if (!['y', 'yes', '+'].includes(result.toLowerCase().trim())) return;
@@ -105,25 +107,25 @@ class DiscardApp {
 
 	/**
 	 * Handles a worker IPC message
-	 * @param {cluster.Worker} worker 
+	 * @param {cluster.Worker} worker
 	 * @param {object} message The message received
 	 * @param {string} message.type Type of this message
 	 * @param {number} message.nonce Unique ID for this message
 	 */
 	async handleWorkerMessage(worker, message) {
-		const { type, nonce } = message;
-		const result = { type, nonce, error: false };
+		const {type, nonce} = message;
+		const result = {type, nonce, error: false};
 
 		switch (type) {
 			case 'sql': {
-				const { query, parameters } = message;
+				const {query, parameters} = message;
 				let data;
 
 				try {
 					data = await this.postgres.unsafe(query, parameters);
 				} catch (err) {
 					result.error = true;
-					data = Object.assign({}, err, { message: err.message });
+					data = Object.assign({}, err, {message: err.message});
 				}
 
 				result.data = data;

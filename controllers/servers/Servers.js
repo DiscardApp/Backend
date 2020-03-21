@@ -17,8 +17,8 @@ class Servers extends ControllerContext {
 	}
 
 	async show() {
-		const { id } = this.parameters.route;
-		const servers = await Server.find({ id });
+		const {id} = this.parameters.route;
+		const servers = await Server.find({id});
 		if (!servers)
 			return this.notFound('Server not found');
 

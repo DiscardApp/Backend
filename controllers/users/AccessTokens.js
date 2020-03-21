@@ -13,8 +13,8 @@ class AccessTokens extends ControllerContext {
 	}
 
 	async show() {
-		const { token } = this.parameters.route;
-		const accessToken = await AccessToken.find({ token });
+		const {token} = this.parameters.route;
+		const accessToken = await AccessToken.find({token});
 		if (!token)
 			return this.notFound('Invalid token');
 
@@ -25,9 +25,9 @@ class AccessTokens extends ControllerContext {
 		if (this.parameters.route.token)
 			return this.badRequest(this.postWithID);
 
-		const { email, password, lifetime } = this.parameters.body;
+		const {email, password, lifetime} = this.parameters.body;
 
-		const user = await User.find({ email });
+		const user = await User.find({email});
 		if (!user || !await User.comparePassword(password, user.password))
 			return this.badRequest('Invalid login');
 
@@ -42,11 +42,11 @@ class AccessTokens extends ControllerContext {
 	}
 
 	async delete() {
-		const { token } = this.parameters.route.token;
+		const {token} = this.parameters.route.token;
 		if (!token)
 			return this.badRequest(this.deleteWithoutID);
 
-		const accessToken = await AccessToken.find({ token });
+		const accessToken = await AccessToken.find({token});
 		if (!accessToken)
 			return this.notFound('Invalid token');
 

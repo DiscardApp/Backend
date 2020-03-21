@@ -17,8 +17,8 @@ class Channels extends ControllerContext {
 	}
 
 	async show() {
-		const { id } = this.parameters.route;
-		const servers = await Channel.find({ id });
+		const {id} = this.parameters.route;
+		const servers = await Channel.find({id});
 		if (!servers)
 			return this.notFound('Channel not found');
 

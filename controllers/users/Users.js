@@ -18,8 +18,8 @@ class Users extends ControllerContext {
 	}
 
 	async show() {
-		const { id } = this.parameters.route;
-		const user = await User.find({ id });
+		const {id} = this.parameters.route;
+		const user = await User.find({id});
 		if (!user)
 			return this.notFound('User not found');
 
@@ -46,7 +46,7 @@ class Users extends ControllerContext {
 		try {
 			user = await model.create();
 		} catch (err) {
-			const { routine, constraint_name } = err;
+			const {routine, constraint_name} = err;
 			if (routine === '_bt_check_unique' && constraint_name === 'users_email_key')
 				return this.badRequest('This email address is already in use');
 
