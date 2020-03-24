@@ -1,0 +1,12 @@
+{
+  "options": {
+    "host": "mail.mcl.gg",
+    "auth": {
+      "user": "discardapp@dreadful.tech",
+      "pass": "i still need to set up env vars bro, pls dont hack me"
+    }
+  },
+  "defaults": {
+    "from": "\"DiscardApp\" discardapp@dreadful.tech"
+  }
+}

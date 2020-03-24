@@ -6,6 +6,7 @@ const readline = require('readline');
 const postgres = require('postgres');
 const ConfigManager = require('./utils/config/ConfigManager');
 const HTTPHandler = require('./utils/http/HTTPHandler');
+const Mailer = require('./utils/mail/Mailer');
 
 class DiscardApp {
 
@@ -139,6 +140,7 @@ class DiscardApp {
 	workerSetup() {
 		console.log(`[Worker.${process.pid}] Starting`);
 		this.httpHandler = new HTTPHandler(this.configManager.http);
+		this.mailer = new Mailer(this.configManager.mail);
 	}
 }
 

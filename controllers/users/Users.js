@@ -1,6 +1,7 @@
 const ControllerContext = require('../../utils/http/ControllerContext');
 const User = require('../../models/user/User');
 const VerificationToken = require('../../models/user/VerificationToken');
+const Mailer = require('../../utils/mail/Mailer');
 
 class Users extends ControllerContext {
 	route(router) {
@@ -67,7 +68,10 @@ class Users extends ControllerContext {
 			return this.error(err);
 		}
 
-		// TODO send token by email
+		Mailer.getInstance().sendMail(user.email, 'Your DiscardApp Account', 'verification', {
+			username: user.username,
+			token: verificationToken.token
+		});
 
 		this.respond(user.toAPIResponse());
 	}
